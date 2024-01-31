@@ -1,0 +1,8 @@
+library(tidyverse)
+
+Site_A4 <- DATA_TS_A4_20240106
+Site_C3 <- DATA_TS_C3_20240106
+Site_D2 <- DATA_TS_A4_20240106
+Site_E1 <- DATA_TS_E1_20240106
+
+Site_A4
