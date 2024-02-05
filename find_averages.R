@@ -22,3 +22,16 @@ print(result)
 
 #Save the result
 write_csv(result, "averages_by_hour_E1.csv")
+
+
+#Merging Files
+data1 <- read.csv("averages_by_hour_A4.csv", header = TRUE)
+data2 <- read.csv("averages_by_hour_C3.csv", header = TRUE)
+data3 <- read.csv("averages_by_hour_D2.csv", header = TRUE)
+data4 <- read.csv("averages_by_hour_E1.csv", header = TRUE)
+
+# Merge the files 
+combined_data <- bind_rows(data1, data2, data3, data4)
+
+write_csv(combined_data, "averages_by_hour_allsites.csv")
+
