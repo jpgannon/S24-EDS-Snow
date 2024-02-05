@@ -1,7 +1,7 @@
 library(dplyr)
 library(lubridate)
 
-data <- read.csv("Data/Timeseries_Data/DATA_TS_A4_20240106.csv", stringsAsFactors = FALSE)
+data <- read.csv("Data/Timeseries_Data/DATA_TS_E1_20240106.csv", stringsAsFactors = FALSE)
 
 data$timestamp <- as.POSIXct(data$timestamp, format = c("%m/%d/%y %H:%M", "%m.%d.%y %H:%M"))
 
@@ -21,4 +21,4 @@ result$hour <- format(result$hour, "%m/%d/%y %H:%M")
 print(result)
 
 #Save the result
-write_csv(result, "averages_by_hour_A4.csv")
+write_csv(result, "averages_by_hour_E1.csv")
