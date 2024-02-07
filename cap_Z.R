@@ -40,13 +40,35 @@ tot_site |>
 
 
 
-                #tot_site1 <- tot_site |>
-               # mutate(Year = year(timestamp))
+                   #tot_site1 <- tot_site |>
+                  #mutate(Year = year(timestamp))
                   #dates <- as.Date(tot_site$timestamp, format = "%d-%m-%Y")
                   #tot_site$timestamp <- format(dates, "%Y-%m-%d")
 
 
-#tttt_sites <- parse_datetime(tot_site, format = "", na = na, local = default_locale(), trim_ws =  TRUE)
+                    #tttt_sites <- parse_datetime(tot_site, format = "", na = na, local = default_locale(), trim_ws =  TRUE)
 
 
-ggplot(tot_site, aes(x = ))
+                    #ggplot(tot_site, aes(x = ))
+#renamed columns to more direct titles
+avg_hr_allsite_1 <- averages_by_hour_allsites |>
+  rename( air_temp = Tair_C , Sen_temp = Tinternal_C )
+
+avg_hr_allsite_1 <- tot_site |>
+  rename( air_temp = Tair_C , Sen_temp = Tinternal_C, Rel_hum = RH_p, Dis_m = distance_m )
+
+
+#merge all columns
+Site_A4 <- Site_A4 |>
+  rename( air_temp = Tair_C , Sen_temp = Tinternal_C, Rel_hum = RH_p, Dis_m = distance_m )
+Site_C3 <- Site_C3 |>
+  rename( air_temp = Tair_C , Sen_temp = Tinternal_C, Rel_hum = RH_p, Dis_m = distance_m )
+Site_D2 <- Site_D2 |>
+  rename( air_temp = Tair_C , Sen_temp = Tinternal_C, Rel_hum = RH_p, Dis_m = distance_m )
+Site_E1 <- Site_E1 |>
+  rename( air_temp = Tair_C , Sen_temp = Tinternal_C, Rel_hum = RH_p )
+
+all <- bind_rows(avg_hr_allsite, Site_A4, Site_C3, Site_D2, Site_E1)
+
+#change to datetime format
+all$timestamp <- as.POSIXct(all$timestamp, format = c("%m/%d/%y %H:%M", "%m.%d.%y %H:%M"))
