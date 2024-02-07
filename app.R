@@ -15,13 +15,11 @@ library(shinythemes)
 library(SwimmeR)
 
 #Import Data
-A4Data <- read.csv("Data/Timeseries_Data/DATA_TS_A4_20240106.csv")
-C3Data <- read.csv("Data/Timeseries_Data/DATA_TS_C3_20240106.csv")
-D2Data <- read.csv("Data/Timeseries_Data/DATA_TS_D2_20240106.csv")
-E1Data <- read.csv("Data/Timeseries_Data/DATA_TS_E1_20240106.csv")
+dataSites <- read.csv("averages_by_hour_allsites.csv")
 
-#Might use later
-#Events <- ordered(BigTop100$Event, levels = c("50 Free", "100 Free", "200 Free", "500 Free", "1000 Free", "1650 Free", "100 Fly", "200 Fly", "100 Back", "200 Back", "100 Breast", "200 Breast", "100 IM", "200 IM", "400 IM", "200 Free Relay", "400 Free Relay", "800 Free Relay", "200 Medlay Relay", "400 Medlay Relay"))
+#Getting different levels
+sites <- ordered(dataSites$Site_Name, levels = c("A4", "C3", "D2", "E1"))
+timeVars <- ordered(dataSites$Site_Name, levels = c("A4", "C3", "D2", "E1"))
 
 button_color_css <- "
 #DivCompClear, #FinderClear, #EnterTimes{
@@ -46,33 +44,69 @@ ui <- fluidPage(
              sidebarLayout(
                sidebarPanel(
                  
-                 #Turn on/off the sites
+                 # Turn on/off the sites
                  titlePanel("Site Characteristics"),
-                 fluidRow(column(3,
-                                 
-                                 # Select the sites to plot
-                                 checkboxGroupInput(inputId = "SiteDisplay",
-                                                    label = "Sites of Interest:",
-                                                    choices = c("A4" = "A4", "C3" = "C3", "D2" = "D2", "E1" = "E1"),
-                                                    selected = "A4"),
-                                 
-                                 # Select which Division(s) to plot
-                                 checkboxGroupInput(inputId = "DivisionFinder",
-                                                    label = "Select Division(s):",
-                                                    choices = c("DI", "DII", "DIII"),
-                                                    selected = "DI")
-                 )) 
-                 
-             ))
-             
-  ) #End of Navbar
-) #End of UI
-
-
-# Define server
-server <- function(input, output, session) {
+                 fluidRow(
+                   column(3,
+                          # Select the sites to plot
+                          checkboxGroupInput(inputId = "SiteDisplay",
+                                             label = "Sites of Interest:",
+                                             choices = c("A4" = "A4", "C3" = "C3", "D2" = "D2", "E1" = "E1"),
+                                             selected = "A4"),
+                          # Select which Division(s) to plot
+                          checkboxGroupInput(inputId = "DivisionFinder",
+                                             label = "Select Division(s):",
+                                             choices = c("DI", "DII", "DIII"),
+                                             selected = "DI")
+                   )
+                 )),
+               
+                 #Main Panel
+                 mainPanel(
+                   fluidRow(
+                     column(3, offset = 9,
+                            radioButtons(inputId = "show_NamesFinder",
+                                         label = "Display:",
+                                         choices = c("School Names", "City Names", "Neither"),
+                                         selected = "School Names")
+                   )),
+                   
+                   #Spinner
+                   withSpinner(
+                     plotOutput(outputId = "scatterplotFinder", click = "click_plotFinder")
+                   ),
+                   hr(),
+                   fluidRow(
+                     column(7,
+                            helpText("Tip: Click locations to populate table below with information on schools in a specific area")
+                            #actionButton(inputId = "draw", label = "Input Event and Times")
+                     ),
+                     column(width = 2, offset = 2, conditionalPanel(
+                       condition = "output.schoolstableFinder",
+                       actionButton(inputId = "FinderClear", label = "Clear Table")
+                     ))
+                   ),
+                   br(),
+                   fluidRow(
+                     withSpinner(
+                       dataTableOutput(outputId = "schoolstableFinder")
+                     ) #End of dataTableOutput
+                   ) #End of br() fluid row
+                 ) #End of Main Pannel
+               ) #End of sidebar layout
+             ) #End of navbar
+  ) #End of UI Code
   
-}
-
-# Run the application
-shinyApp(ui = ui, server = server)
+  # Define server
+  server <- function(input, output, session) {
+    
+    BigTop100_finder <- reactive({
+      req(input$SiteDisplay)
+    })
+    
+    
+  }
+  
+  # Run the application
+  shinyApp(ui = ui, server = server)
+  
