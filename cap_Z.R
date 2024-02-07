@@ -69,6 +69,17 @@ Site_E1 <- Site_E1 |>
   rename( air_temp = Tair_C , Sen_temp = Tinternal_C, Rel_hum = RH_p )
 
 all <- bind_rows(avg_hr_allsite, Site_A4, Site_C3, Site_D2, Site_E1)
-
+all_2 <-bind_rows(Site_A4, Site_C3, Site_D2, Site_E1) 
 #change to datetime format
 all$timestamp <- as.POSIXct(all$timestamp, format = c("%m/%d/%y %H:%M", "%m.%d.%y %H:%M"))
+all_2$timestamp <- as.POSIXct(all_2$timestamp, format = c("%m/%d/%y %H:%M", "%m.%d.%y %H:%M"))
+
+#sum by hours
+all_2$hour <- floor_date(all_2$timestamp, "hour")
+
+all_2 <- all_2 %>%
+  group_by(hour) %>%
+  summarise(across(starts_with("T"), mean, na.rm = TRUE), 
+            Site = first(Site) )
+
+all_2$hour <- format(all_2$hour, "%m/%d/%y %H:%M")
