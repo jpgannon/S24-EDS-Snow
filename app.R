@@ -19,7 +19,7 @@ dataSites <- read.csv("averages_by_hour_allsites.csv")
 
 #Getting different levels
 sites <- ordered(dataSites$Site_Name, levels = c("A4", "C3", "D2", "E1"))
-timeVars <- ordered(dataSites$Site_Name, levels = c("A4", "C3", "D2", "E1"))
+#timeVars <- ordered(dataSites$Hour, levels = c("A4", "C3", "D2", "E1"))
 
 button_color_css <- "
 #DivCompClear, #FinderClear, #EnterTimes{
@@ -53,13 +53,12 @@ ui <- fluidPage(
                                              label = "Sites of Interest:",
                                              choices = c("A4" = "A4", "C3" = "C3", "D2" = "D2", "E1" = "E1"),
                                              selected = "A4"),
-                          # Select which Division(s) to plot
-                          checkboxGroupInput(inputId = "DivisionFinder",
-                                             label = "Select Division(s):",
-                                             choices = c("DI", "DII", "DIII"),
-                                             selected = "DI")
-                   )
-                 )),
+                   ) #End of column 3
+                 ) #End of FLuid Row
+                 ),#End of sidebar panel
+                 
+                
+               
                
                  #Main Panel
                  mainPanel(
