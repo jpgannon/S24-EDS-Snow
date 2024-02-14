@@ -83,3 +83,36 @@ all_2 <- all_2 %>%
             Site = first(Site) )
 
 all_2$hour <- format(all_2$hour, "%m/%d/%y %H:%M")
+
+
+
+#remove timestamp column
+avg_hour <- avg_hr_allsite_1 |>
+  subset(select = -c(timestamp))
+
+
+tot_site$timestamp <- as.POSIXct(tot_site$timestamp, format = c("%m/%d/%y %H:%M", "%m.%d.%y %H:%M"))
+
+#Rounding down the timestamp to the nearest hour
+tot_site$hour <- floor_date(tot_site$timestamp, "hour")
+
+#Grouping by hour and calculating the average for each variable
+  #(removes distance)
+result <- tot_site %>%
+  group_by(hour) %>%
+  summarise(across(starts_with("T"), mean, na.rm = TRUE), 
+            Site = first(Site) )
+
+
+#removing old time stamp column
+avg_hour <- tot_site |>
+  subset(select = -c(timestamp))
+
+avg_hr_allsite_2 <- avg_hr_allsite_1 |>
+  subset(select = -c(timestamp))
+
+
+
+#averaging
+tot <- tot_site |>
+  filter(!duplicated(hour))
