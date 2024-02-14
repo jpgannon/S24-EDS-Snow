@@ -15,7 +15,7 @@ library(shinythemes)
 library(SwimmeR)
 
 #Import Data
-dataSites <- read.csv("averages_by_hour_allsites.csv")
+dataSites <- read.csv("averages_by_hour_allsites_1.csv")
 
 #Getting different levels
 sites <- ordered(dataSites$Site_Name, levels = c("A4", "C3", "D2", "E1"))
