@@ -1,8 +1,8 @@
-################################################################################
+####################################################################################
 # Snow Depth App for New Hampshire
 #
 # Virginia Tech EDS Capstone
-################################################################################
+####################################################################################
 
 library(dplyr)
 library(ggplot2)
@@ -19,6 +19,9 @@ dataSites <- read.csv("averages_by_hour_allsites.csv")
 
 #Getting different levels
 sites <- ordered(dataSites$Site_Name, levels = c("A4", "C3", "D2", "E1"))
+fiftystatesCAN <- read.csv("fiftystatesCAN.csv") #From https://github.com/gpilgrim2670/SwimMap/tree/master repo
+region <- filter(fiftystatesCAN, GeoRegion %in% "New England")
+
 #timeVars <- ordered(dataSites$Hour, levels = c("A4", "C3", "D2", "E1"))
 
 button_color_css <- "
@@ -103,6 +106,27 @@ ui <- fluidPage(
       req(input$SiteDisplay)
     })
     
+    #Map display
+    output$scatterplotFinder <- renderPlot({
+      isolate({
+        ggplot() +
+          geom_polygon(data = region, aes(x = long, y = lat, group = group), color = "white", fill = "grey") + 
+          geom_point(data = region, aes(x = long, y = lat, alpha = 0.8)) + 
+          coord_quickmap() +
+          guides(fill = "none") +
+          theme_void() +
+          theme(axis.text = element_blank(), axis.ticks = element_blank()) +
+          theme(plot.title = element_text(hjust=0.5, face = "bold")) +
+          theme(plot.background = element_rect(fill = "white"), plot.margin = unit(c(0.5,0.5,0.5,0.5), "cm")) +
+          guides(alpha = "none") +
+          theme(legend.text = element_text(size = 12),
+                legend.title = element_text(size = 15)) +
+          theme(plot.background = element_rect(
+            color = "white"
+          ))
+        
+      })
+    })
     
   }
   

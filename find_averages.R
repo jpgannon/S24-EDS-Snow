@@ -1,6 +1,7 @@
 #Loading in packages
 library(dplyr)
 library(lubridate)
+library(tidyr)
 
 #Reading in the data
 data <- read.csv("Data/Timeseries_Data/DATA_TS_E1_20240106.csv", stringsAsFactors = FALSE)
@@ -35,4 +36,7 @@ combined_data <- bind_rows(data1, data2, data3, data4)
 
 #Writing the combined averages to a new CSV
 write_csv(combined_data, "averages_by_hour_allsites.csv")
+
+fiftystatesCAN <- read.csv("fiftystatesCAN.csv") #From https://github.com/gpilgrim2670/SwimMap/tree/master repo
+region <- fiftystatesCAN %>% group_by(GeoRegion) %>% (GeoRegion == "NewEngland")
 
