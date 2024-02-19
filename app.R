@@ -13,14 +13,20 @@ library(tidyr)
 library(shinycssloaders)
 library(shinythemes)
 library(SwimmeR)
+library(raster)
 
-#Import Data
+#Reading in Data
 dataSites <- read.csv("averages_by_hour_allsites_1.csv")
-
-#Getting different levels
 sites <- ordered(dataSites$Site_Name, levels = c("A4", "C3", "D2", "E1"))
 fiftystatesCAN <- read.csv("fiftystatesCAN.csv") #From https://github.com/gpilgrim2670/SwimMap/tree/master repo
 region <- fiftystatesCAN %>% filter(GeoRegion == "NewEngland")
+regioncoords <- region %>% select(lat, long)
+snowchangeNov15to30 <- dplyr::select("Data/Rasters/SnowChange_11_15_11_30.tif")
+raster_values <- extract(snowchangeNov15to30, regioncoords)
+
+#rgb <- brick(“pathto/rgb.tif”)
+#plot(grey)
+#plotRGB(rgb)
 
 #timeVars <- ordered(dataSites$Hour, levels = c("A4", "C3", "D2", "E1"))
 
@@ -111,11 +117,15 @@ ui <- fluidPage(
       isolate({
         ggplot() +
           
+          #Test Raster
+          geom_raster(data = as.data.frame(regioncoords), aes(x = x, y = y, fill = raster_values)) +
+          
           #Displays New England Shape on Map
           geom_polygon(data = region, aes(x = long, y = lat, group = group), color = "white", fill = "grey") +
           
           #Display sites
           #geom_point(data = region, aes(x = long, y = lat, alpha = 0.8)) + 
+          
           coord_quickmap() +
           guides(fill = "none") +
           theme_void() +
