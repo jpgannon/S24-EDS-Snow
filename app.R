@@ -20,7 +20,7 @@ dataSites <- read.csv("averages_by_hour_allsites_1.csv")
 #Getting different levels
 sites <- ordered(dataSites$Site_Name, levels = c("A4", "C3", "D2", "E1"))
 fiftystatesCAN <- read.csv("fiftystatesCAN.csv") #From https://github.com/gpilgrim2670/SwimMap/tree/master repo
-region <- filter(fiftystatesCAN, GeoRegion %in% "New England")
+region <- fiftystatesCAN %>% filter(GeoRegion == "NewEngland")
 
 #timeVars <- ordered(dataSites$Hour, levels = c("A4", "C3", "D2", "E1"))
 
@@ -110,8 +110,12 @@ ui <- fluidPage(
     output$scatterplotFinder <- renderPlot({
       isolate({
         ggplot() +
-          geom_polygon(data = region, aes(x = long, y = lat, group = group), color = "white", fill = "grey") + 
-          geom_point(data = region, aes(x = long, y = lat, alpha = 0.8)) + 
+          
+          #Displays New England Shape on Map
+          geom_polygon(data = region, aes(x = long, y = lat, group = group), color = "white", fill = "grey") +
+          
+          #Display sites
+          #geom_point(data = region, aes(x = long, y = lat, alpha = 0.8)) + 
           coord_quickmap() +
           guides(fill = "none") +
           theme_void() +
