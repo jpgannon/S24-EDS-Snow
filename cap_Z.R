@@ -59,8 +59,6 @@ avg_hr_allsite_1 <- tot_site |>
 
 
 #merge all columns
-Site_A4 <- Site_A4 |>
-  rename( air_temp = Tair_C , Sen_temp = Tinternal_C, Rel_hum = RH_p, Dis_m = distance_m )
 Site_C3 <- Site_C3 |>
   rename( air_temp = Tair_C , Sen_temp = Tinternal_C, Rel_hum = RH_p, Dis_m = distance_m )
 Site_D2 <- Site_D2 |>
@@ -120,4 +118,13 @@ tot <- tot_site |>
 tot <- tot |>
   rename(Site_Name = Site)
 
+tot <- tot |>
+  rename( air_temp = Tair_C , Sen_temp = Tinternal_C, Rel_hum = RH_p, Dis_m = distance_m )
+
+tot <- tot |>
+  subset(select = -c(timestamp))
+tot <- tot |>
+  subset(select = -c(Site))
+
 write_csv(tot, "averages_by_hour_allsites_1.csv")
+
