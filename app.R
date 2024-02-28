@@ -9,22 +9,19 @@ library(ggplot2)
 library(shiny)
 library(DT)
 library(ggrepel)
-library(tidyr)
+#library(tidyr)
 library(shinycssloaders)
 library(shinythemes)
 library(SwimmeR)
 library(terra)
-#library(raster)
-library(jsonlite)
-library(sp)
-library(sf)
-library(plotly)
+library(leaflet)
+
 
 #Reading in Data
 dataSites <- read.csv("averages_by_hour_allsites_1.csv")
 sites <- ordered(dataSites$Site_Name, levels = c("A4", "C3", "D2", "E1"))
-fiftystatesCAN <- read.csv("fiftystatesCAN.csv") #From https://github.com/gpilgrim2670/SwimMap/tree/master repo
-region <- fiftystatesCAN %>% filter(GeoRegion == "NewEngland")
+raster_data <- rast("Data/Rasters/SnowChange_11_15_2_2.tif")
+#palette1 <- colorNumeric(palette = 'Y10rRd', domain = values(raster_data))
 
 #shapefile <- readShapeSpatial("Data/Shapefiles/hbef_ws3_siteLocations/hbef_23-24_UAS_SiteLocations.shp")
 #shapefile_df <- fortify(shapefile)
@@ -81,13 +78,8 @@ ui <- fluidPage(
                
                  #Main Panel
                  mainPanel(
-                   fluidRow(
-                     column(3, offset = 9,
-                            radioButtons(inputId = "show_NamesFinder",
-                                         label = "Display:",
-                                         choices = c("School Names", "City Names", "Neither"),
-                                         selected = "School Names")
-                   )),
+                   
+                   leafletOutput("map"),
                    
                    #Spinner
                    withSpinner(
@@ -123,33 +115,12 @@ ui <- fluidPage(
     })
     
     #Map display
-    output$scatterplotFinder <- renderPlot({
-      isolate({
-        ggplot() +
-          #Displays New England Shape on Map
-          geom_polygon(data = region, aes(x = long, y = lat, group = group), color = "white", fill = "grey") +
-          #geom_raster(data = raster_df, aes(x = x, y = y, fill = value)) + scale_fill_gradientn(colours = terrain.colors(10)) +
-          #(geom_sf(data = shapefile, aes(fill = "red")) + coord_sf()) +
-          #geom_polygon(data = shapefile_df, aes(x = longitude, y = latitude, group = group), color = "black", fill = "white") + 
+    output$map <- renderLeaflet({
         
-          #Display sites
-          #geom_point(data = region, aes(x = long, y = lat, alpha = 0.8)) + 
-          
-          coord_quickmap() +
-          guides(fill = "none") +
-          theme_void() +
-          theme(axis.text = element_blank(), axis.ticks = element_blank()) +
-          theme(plot.title = element_text(hjust=0.5, face = "bold")) +
-          theme(plot.background = element_rect(fill = "white"), plot.margin = unit(c(0.5,0.5,0.5,0.5), "cm")) +
-          guides(alpha = "none") +
-          theme(legend.text = element_text(size = 12),
-                legend.title = element_text(size = 15)) +
-          theme(plot.background = element_rect(
-            color = "white"
-          ))
-        
-        
-      })
+        leaflet(raster_data) %>% 
+          addTiles() %>% 
+          addRasterImage(raster_data, opacity = 0.8) %>%
+          setView(0, 0, zoom = 2)
       
       
       

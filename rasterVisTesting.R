@@ -1,6 +1,6 @@
 library(terra)
 library(leaflet)
-raster_data <- rast("/Users/micahaxford/Desktop/CapstoneProjects/Data/Rasters/SnowChange_11_15_2_2.tif")
+raster_data <- rast("Data/Rasters/SnowChange_11_15_2_2.tif")
 
 #raster_ <- as.matrix(raster_data)
 palette1 <- colorNumeric(palette = 'Y10rRd', domain = values(raster_data))
