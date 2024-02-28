@@ -72,8 +72,7 @@ ui <- fluidPage(
                    ) #End of column 3
                  ) #End of FLuid Row
                  ),#End of sidebar panel
-                 
-                
+               
                
                
                  #Main Panel
@@ -103,10 +102,22 @@ ui <- fluidPage(
                      ) #End of dataTableOutput
                    ) #End of br() fluid row
                  ) #End of Main Pannel
-               ) #End of sidebar layout
+               ), #End of sidebar layout
+             
+             
+             
+             tabPanel("Snow Depth By Station", fluid = TRUE, icon = icon("snowflake"),
+                      tags$style(button_color_css)
+             ),
+             
+             
+             
+             
              ) #End of navbar
   ) #End of UI Code
   
+
+
   # Define server
   server <- function(input, output, session) {
     
@@ -119,10 +130,7 @@ ui <- fluidPage(
         
         leaflet(raster_data) %>% 
           addTiles() %>% 
-          addRasterImage(raster_data, opacity = 0.8) %>%
-          setView(0, 0, zoom = 2)
-      
-      
+          addRasterImage(raster_data, opacity = 0.8)
       
     })
     
