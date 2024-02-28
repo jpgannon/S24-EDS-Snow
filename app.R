@@ -88,7 +88,7 @@ ui <- fluidPage(
                    hr(),
                    fluidRow(
                      column(7,
-                            helpText("Tip: Click locations to populate table below with information on schools in a specific area")
+                            #helpText("Tip: Click locations to populate table below with information on schools in a specific area")
                             #actionButton(inputId = "draw", label = "Input Event and Times")
                      ),
                      column(width = 2, offset = 2, conditionalPanel(
@@ -119,8 +119,7 @@ ui <- fluidPage(
         
         leaflet(raster_data) %>% 
           addTiles() %>% 
-          addRasterImage(raster_data, opacity = 0.8) %>%
-          setView(0, 0, zoom = 2)
+          addRasterImage(raster_data, opacity = 0.8)
       
       
       
