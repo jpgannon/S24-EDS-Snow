@@ -9,6 +9,11 @@ library(shinycssloaders)
 library(shinythemes)
 library(SwimmeR)
 library(raster)
+library(terra)
+library(jsonlite)
+library(sp)
+library(leaflet)
+
 
 #Reading in the data
 data <- read.csv("Data/Timeseries_Data/DATA_TS_E1_20240106.csv", stringsAsFactors = FALSE)
@@ -48,6 +53,5 @@ write_csv(combined_data, "averages_by_hour_allsites.csv")
 fiftystatesCAN <- read.csv("fiftystatesCAN.csv") #From https://github.com/gpilgrim2670/SwimMap/tree/master repo
 region <- fiftystatesCAN %>% filter(GeoRegion == "NewEngland")
 
-regioncoords <- region %>% select(lat, long)
-snowchangeNov15to30 <- dplyr::select("Data/Rasters/SnowChange_11_15_11_30.tif")
-raster_values <- extract(snowchangeNov15to30, regioncoords)
+
+

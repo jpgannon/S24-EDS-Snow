@@ -13,16 +13,22 @@ library(tidyr)
 library(shinycssloaders)
 library(shinythemes)
 library(SwimmeR)
-library(raster)
+library(terra)
+#library(raster)
+library(jsonlite)
+library(sp)
+library(sf)
+library(plotly)
 
 #Reading in Data
 dataSites <- read.csv("averages_by_hour_allsites_1.csv")
 sites <- ordered(dataSites$Site_Name, levels = c("A4", "C3", "D2", "E1"))
 fiftystatesCAN <- read.csv("fiftystatesCAN.csv") #From https://github.com/gpilgrim2670/SwimMap/tree/master repo
 region <- fiftystatesCAN %>% filter(GeoRegion == "NewEngland")
-regioncoords <- region %>% select(lat, long)
-snowchangeNov15to30 <- dplyr::select("Data/Rasters/SnowChange_11_15_11_30.tif")
-raster_values <- extract(snowchangeNov15to30, regioncoords)
+
+#shapefile <- readShapeSpatial("Data/Shapefiles/hbef_ws3_siteLocations/hbef_23-24_UAS_SiteLocations.shp")
+#shapefile_df <- fortify(shapefile)
+
 
 #rgb <- brick(“pathto/rgb.tif”)
 #plot(grey)
@@ -62,6 +68,10 @@ ui <- fluidPage(
                                              label = "Sites of Interest:",
                                              choices = c("A4" = "A4", "C3" = "C3", "D2" = "D2", "E1" = "E1"),
                                              selected = "A4"),
+                          checkboxGroupInput(inputId = "RasterDisplay",
+                                             label = "Rasters:",
+                                             choices = c("Nov15toNov30" = "Nov15toNov30", "Nov3toFeb2" = "Nov3toFeb2"),
+                                             selected = "Nov15toNov30"),
                    ) #End of column 3
                  ) #End of FLuid Row
                  ),#End of sidebar panel
@@ -116,13 +126,12 @@ ui <- fluidPage(
     output$scatterplotFinder <- renderPlot({
       isolate({
         ggplot() +
-          
-          #Test Raster
-          geom_raster(data = as.data.frame(regioncoords), aes(x = x, y = y, fill = raster_values)) +
-          
           #Displays New England Shape on Map
           geom_polygon(data = region, aes(x = long, y = lat, group = group), color = "white", fill = "grey") +
-          
+          #geom_raster(data = raster_df, aes(x = x, y = y, fill = value)) + scale_fill_gradientn(colours = terrain.colors(10)) +
+          #(geom_sf(data = shapefile, aes(fill = "red")) + coord_sf()) +
+          #geom_polygon(data = shapefile_df, aes(x = longitude, y = latitude, group = group), color = "black", fill = "white") + 
+        
           #Display sites
           #geom_point(data = region, aes(x = long, y = lat, alpha = 0.8)) + 
           
@@ -139,7 +148,11 @@ ui <- fluidPage(
             color = "white"
           ))
         
+        
       })
+      
+      
+      
     })
     
   }
