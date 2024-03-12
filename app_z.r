@@ -16,7 +16,7 @@ library(SwimmeR)
 library(terra)
 library(leaflet)
 
-setwd("C:/Users/Cliff Johnson/OneDrive/Desktop/S24-EDS-Snow-main/S24-EDS-Snow-leaflet")
+#setwd("C:/Users/Cliff Johnson/OneDrive/Desktop/S24-EDS-Snow-main/S24-EDS-Snow-leaflet")
 
 #Reading in Data
 dataSites <- read.csv("averages_by_hour_allsites_1.csv")
@@ -131,24 +131,54 @@ server <- function(input, output, session) {
     req(input$SiteDisplay)
   })
   
-  #Map display
+  # Map display
   output$map <- renderLeaflet({
-    
     leaflet(raster_data) %>% 
       addTiles() %>% 
       addRasterImage(raster_data, opacity = 0.8)
-    
   })
   
   # Scatter plot for Temporal Data
   output$scatterplotTemporal <- renderPlot({
-    # Your scatter plot code here
-    ggplot(SiteA4, aes(x = hour, y = Tair_C, color = Site_Name)) +
-      geom_point() +
-      theme_minimal()
+    # Filter data based on selected site
+    selected_site <- switch(input$Sites, "A4" = SiteA4, "C3" = SiteC3, "D2" = SiteD2, "E1" = SiteE1)
+    
+    # Check if any site variable is selected
+    if ("hour" %in% input$SiteVariables) {
+      # Your scatter plot code here
+      ggplot(selected_site, aes(x = hour, y = Tair_C, color = Site_Name)) +
+        geom_point() +
+        theme_minimal()
+    }
   })
-  
 }
+
+
+
+      #server <- function(input, output, session) {
+  
+        #BigTop100_finder <- reactive({
+        # req(input$SiteDisplay)
+        #  })
+  
+          #Map display
+         # output$map <- renderLeaflet({
+    
+            # leaflet(raster_data) %>% 
+           #  addTiles() %>% 
+             #    addRasterImage(raster_data, opacity = 0.8)
+    
+              #  })
+  
+             # Scatter plot for Temporal Data
+             # output$scatterplotTemporal <- renderPlot({
+            # Your scatter plot code here
+             # ggplot(SiteA4, aes(x = hour, y = Tair_C, color = Site_Name)) +
+             #  geom_point() +
+             #  theme_minimal()
+           # })
+  
+            #}
 
 # Run the application
 shinyApp(ui = ui, server = server)
