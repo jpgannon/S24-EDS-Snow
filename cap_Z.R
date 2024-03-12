@@ -4,7 +4,7 @@
 library(tidyverse)
 library(lubridate) 
 library(readr)
-
+install.packages("leaflet")
 #read sites
 DATA_TS_A4_20240106 <- read_csv("Data/Timeseries_Data/DATA_TS_A4_20240106.csv")
 DATA_TS_C3_20240106 <- read_csv("Data/Timeseries_Data/DATA_TS_C3_20240106.csv")
