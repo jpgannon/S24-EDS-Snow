@@ -109,39 +109,21 @@ ui <- fluidPage(
                                                       label = "Temporal Data from Sites",
                                                       choices = c("A4" = "A4", "C3" = "C3", "D2" = "D2", "E1" = "E1"),
                                                       selected = "A4"),
-                                   checkboxGroupInput(inputId = "TemporalDisplay",
-                                                      label = "CSVs:",
-                                                      choices = c("averages_by_hour_A4.csv" = "averages_by_hour_A4.csv", "averages_by_hour_C3.csv" = "averages_by_hour_C3.csv", "averages_by_hour_D2.csv" = "averages_by_hour_D2.csv", "averages_by_hour_E1" = "averages_by_hour_E1.csv"),
-                                                      selected = "averages_by_hour_A4.csv")
+                                   checkboxGroupInput(inputId = "Site Variables",
+                                                      label = "Site Variables:",
+                                                      choices = c("hour" = "hour"),
+                                                      selected = "hour")
                             )
                           )
                         ),
                         mainPanel(
-                          leafletOutput("map2"),
-                          withSpinner(
-                            plotOutput(outputId = "scatterplotFinder", click = "click_plotFinder")
-                          ),
-                          hr(),
-                          fluidRow(
-                            column(7,
-                                   helpText("Tip: Click locations to populate table below with information on schools in a specific area")
-                            ),
-                            column(width = 2, offset = 2, conditionalPanel(
-                              condition = "output.schoolstableFinder",
-                              actionButton(inputId = "FinderClear", label = "Clear Table")
-                            ))
-                          ),
-                          br(),
-                          fluidRow(
-                            withSpinner(
-                              dataTableOutput(outputId = "schoolstableFinder")
-                            )
-                          )
+                          plotOutput(outputId = "scatterplotTemporal")
                         )
                       )
              )
   ) #End of navbar
 ) #End of UI Code
+
 # Define server
 server <- function(input, output, session) {
   
@@ -156,6 +138,14 @@ server <- function(input, output, session) {
       addTiles() %>% 
       addRasterImage(raster_data, opacity = 0.8)
     
+  })
+  
+  # Scatter plot for Temporal Data
+  output$scatterplotTemporal <- renderPlot({
+    # Your scatter plot code here
+    ggplot(SiteA4, aes(x = hour, y = Tair_C, color = Site_Name)) +
+      geom_point() +
+      theme_minimal()
   })
   
 }
