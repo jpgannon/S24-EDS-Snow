@@ -144,7 +144,7 @@ server <- function(input, output, session) {
     selected_site <- switch(input$Sites, "A4" = SiteA4, "C3" = SiteC3, "D2" = SiteD2, "E1" = SiteE1)
     
     # Check if any site variable is selected
-    if ("hour" %in% input$SiteVariables) {
+    if ("hour" %in% input$`Site Variables`) {
       # Your scatter plot code here
       ggplot(selected_site, aes(x = hour, y = Tair_C, color = Site_Name)) +
         geom_point() +
