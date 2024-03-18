@@ -118,7 +118,7 @@ tot <- tot_site |>
 tot <- tot |>
   rename(Site_Name = Site)
 
-tot <- tot |>
+tot_site <- tot_site |>
   rename( air_temp = Tair_C , Sen_temp = Tinternal_C, Rel_hum = RH_p, Dis_m = distance_m )
 
 tot <- tot |>
@@ -128,3 +128,4 @@ tot <- tot |>
 
 write_csv(tot, "averages_by_hour_allsites_1.csv")
 
+write.csv(tot_site, "avg_hour_site.csv", row.names = TRUE)
