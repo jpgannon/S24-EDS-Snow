@@ -1,0 +1,12 @@
+name: EDS_CAP
+title: EDS_CAP
+username: zyaire-bayne
+account: zyaire-bayne
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 11636155
+bundleId: 8442528
+url: https://zyaire-bayne.shinyapps.io/EDS_CAP/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
