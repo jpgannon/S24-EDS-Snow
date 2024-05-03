@@ -20,31 +20,31 @@ library(RColorBrewer)
 
 ####################################################################################################################################### 
 #Read in temporal data
-dataSites <- read_csv("Data/TemporalData/tot_avg_hour.csv", locale = locale(encoding = "latin1")) #Fix for encoding error on CSV
+dataSites <- read_csv("TemporalData/tot_avg_hour.csv", locale = locale(encoding = "latin1")) #Fix for encoding error on CSV
 
 #Order Sites
 sites <- ordered(dataSites$Site, levels = c("A4", "C3", "D2", "E1"))
 
 #Read in Rasters
-Nov15 <- rast('Data/Rasters/SnowDEMs/HBWS3_V70_11_15_2023_baseline_DEM_1m_TIN.tif')
-Nov30 <- rast('Data/Rasters/SnowDEMs/HBWS3_V70_2023_11_30_snow_DEM_1m.tif')
-Feb2 <- rast('Data/Rasters/SnowDEMs/HBWS3_V70_02_02_2024_snow_DEM_1m.tif')
-Feb20 <- rast('Data/Rasters/SnowDEMs/HBWS3_V70_2024_02_20_snow_DEM_1m.tif')
-Mar06 <- rast('Data/Rasters/SnowDEMs/HBWS3_V70_2024_03_06_snow_DEM_1m.tif')
+Nov15 <- rast('Rasters/SnowDEMs/HBWS3_V70_11_15_2023_baseline_DEM_1m_TIN.tif')
+Nov30 <- rast('Rasters/SnowDEMs/HBWS3_V70_2023_11_30_snow_DEM_1m.tif')
+Feb2 <- rast('Rasters/SnowDEMs/HBWS3_V70_02_02_2024_snow_DEM_1m.tif')
+Feb20 <- rast('Rasters/SnowDEMs/HBWS3_V70_2024_02_20_snow_DEM_1m.tif')
+Mar06 <- rast('Rasters/SnowDEMs/HBWS3_V70_2024_03_06_snow_DEM_1m.tif')
 #Read in watersheds, streams, and site locations
-watershedBoundaries <- st_read('Data/Shapefiles/hbef_watershed3_boundary/WS_WS3.shp') %>%
+watershedBoundaries <- st_read('Shapefiles/hbef_watershed3_boundary/WS_WS3.shp') %>%
   st_transform(4326)
-siteLocations <- st_read('Data/Shapefiles/hbef_ws3_siteLocations/HBEFSiteLocations.shp') %>%
+siteLocations <- st_read('Shapefiles/hbef_ws3_siteLocations/HBEFSiteLocations.shp') %>%
   st_transform(4326)
-streams <- st_read('Data/Shapefiles/hbef_streams/WSstreams.shp') %>%
+streams <- st_read('Shapefiles/hbef_streams/WSstreams.shp') %>%
   st_transform(4326)
 
 #Read in Hillshades
-Hillshade_Nov15 <-rast('Data/Rasters/Hillshade/hillshade2.tif')
-Hillshade_Nov30 <- rast('Data/Rasters/Hillshade/Hillshade_Nov30.tif')
-Hillshade_Feb02 <- raster('Data/Rasters/Hillshade/Hillshade_Feb02.tif')
-Hillshade_Feb20 <- rast('Data/Rasters/Hillshade/Hillshade_Feb20.tif')
-Hillshade_Mar06 <- rast('Data/Rasters/Hillshade/Hillshade_Mar06.tif')
+Hillshade_Nov15 <-rast('Rasters/Hillshade/hillshade2.tif')
+Hillshade_Nov30 <- rast('Rasters/Hillshade/Hillshade_Nov30.tif')
+Hillshade_Feb02 <- raster('Rasters/Hillshade/Hillshade_Feb02.tif')
+Hillshade_Feb20 <- rast('Rasters/Hillshade/Hillshade_Feb20.tif')
+Hillshade_Mar06 <- rast('Rasters/Hillshade/Hillshade_Mar06.tif')
 
 
 #######################################################################################################################################
