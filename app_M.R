@@ -66,7 +66,7 @@ ui <- fluidPage(
                                                       label = "Sites of Interest:",
                                                       choices = c("A4" = "A4", "C3" = "C3", "D2" = "D2", "E1" = "E1"),
                                                       selected = "A4"),
-                                   checkboxGroupInput(inputId = "RasterDisplay",
+                                   radioButtons(inputId = "RasterDisplay",
                                                       label = "Rasters:",
                                                       choices = c("Nov15toNov30" = "Nov15toNov30", "Nov30toFeb2" = "Nov30toFeb2", "Nov15toFeb2" = "Nov15toFeb2"),
                                                       selected = "Nov15toNov30")
@@ -137,14 +137,34 @@ server <- function(input, output, session) {
   output$map <- renderLeaflet({
     
     selected_raster <- switch(input$RasterDisplay, "November 15th to November 30th" = Nov15Nov30, 
-                              "November 30th to February 2nd", = Nov30Feb2,
+                              "November 30th to February 2nd" = Nov30Feb2,
                               "November 15th to February 2nd" = Nov15Feb2)
+ #MappingDifferentRasters   
+    if (input$RasterDisplay == "Nov15toNov30") {
+        
+     
+        leaflet(Nov15Nov30) %>% 
+        addTiles() %>% 
+        addRasterImage(Nov15Nov30, opacity = 0.8)
+    }
     
-    #if()
+  else if(input$RasterDisplay == "Nov15toFeb2") {
+      
     
-      leaflet(selected_raster) %>% 
-      addTiles() %>% 
-      addRasterImage(raster_data, opacity = 0.8)
+        leaflet(Nov15Feb2) %>% 
+        addTiles() %>%
+        addRasterImage(Nov15Feb2)
+    }
+    
+  else if (input$RasterDisplay == "Nov30toFeb2") {
+    
+  
+      leaflet(Nov30Feb2) %>%
+      addTiles() %>%
+      addRasterImage(Nov30Feb2)
+  }  
+    
+   
   })
   
   # Scatter plot for Temporal Data
